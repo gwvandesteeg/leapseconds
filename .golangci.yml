@@ -1,0 +1,4 @@
+---
+linter-settings:
+  misspell:
+    locale: UK
