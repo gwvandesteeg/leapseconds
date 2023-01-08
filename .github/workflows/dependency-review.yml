@@ -4,6 +4,7 @@ on: [pull_request]
 
 permissions:
   contents: read
+  repository-projects: read
 
 jobs:
   dependency-review:
