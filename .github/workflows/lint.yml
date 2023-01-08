@@ -42,28 +42,8 @@ jobs:
           restore-keys: |
             go-${{ runner.os }}-
 
-      - name: Verify dependencies
-        run: |
-          go mod verify
-          go mod download
-          LINT_VERSION=1.50.1
-          curl -fsSL https://github.com/golangci/golangci-lint/releases/download/v${LINT_VERSION}/golangci-lint-${LINT_VERSION}-linux-amd64.tar.gz | \
-            tar xz --strip-components 1 --wildcards \*/golangci-lint
-          mkdir -p bin && mv golangci-lint bin/
-
-      - name: Run checks
-        run: |
-          STATUS=0
-          assert-nothing-changed() {
-            local diff
-            "$@" >/dev/null || return 1
-            if ! diff="$(git diff -U1 --color --exit-code)"; then
-              printf '\e[31mError: running `\e[1m%s\e[22m` results in modifications that you must check into version control:\e[0m\n%s\n\n' "$*" "$diff" >&2
-              git checkout -- .
-              STATUS=1
-            fi
-          }
-          assert-nothing-changed go fmt ./...
-          assert-nothing-changed go mod tidy
-          bin/golangci-lint run --out-format=github-actions --timeout=3m || STATUS=$?
-          exit $STATUS
+      - name: golangci-lint
+        uses: golangci/golangci-lint-action@v3
+        with:
+          # Optional: version of golangci-lint to use in form of v1.2 or v1.2.3 or `latest` to use the latest version
+          version: latest

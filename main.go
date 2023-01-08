@@ -266,6 +266,7 @@ func parseDataFile(body io.Reader) ([]leapSecondData, error) {
 	return rv, nil
 }
 
+// fetchDataFileFromURL retrieves a data file from the provided URL
 func fetchDataFileFromURL(ctx context.Context, url string, client http.Client) ([]leapSecondData, error) {
 	req, err := http.NewRequestWithContext(ctx, http.MethodGet, url, nil)
 	if err != nil {
@@ -282,11 +283,13 @@ func fetchDataFileFromURL(ctx context.Context, url string, client http.Client) (
 //go:embed assets/Leap_Second.dat
 var embeddedLeapSecondData []byte
 
+// fetchDataFileFromEmbedded retrieves a data file from the build time embedded data asset
 func fetchDataFileFromEmbedded() ([]leapSecondData, error) {
 	b := bytes.NewReader(embeddedLeapSecondData)
 	return fetchDataFileFromReader(b)
 }
 
+// fetchDataFileFromReader retrieves a data file from io.Reader
 func fetchDataFileFromReader(src io.Reader) ([]leapSecondData, error) {
 	parsed, err := parseDataFile(src)
 	if err != nil {
