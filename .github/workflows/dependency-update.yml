@@ -23,7 +23,7 @@ jobs:
           sed -En 's/^go (.*)$/go-version=\1/p' go.mod >> $GITHUB_OUTPUT
 
       - name: Set up Go version ${{ steps.get-go-version.outputs.go-version }}
-        uses: actions/setup-go@v3
+        uses: actions/setup-go@v4
         with:
           go-version: ${{ steps.get-go-version.outputs.go-version }}
 
